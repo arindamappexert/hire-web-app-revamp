@@ -5,17 +5,10 @@ import { EyeIcon } from 'lucide-react'
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
-      {/* Left Section */}
       <div className="hidden w-1/2 flex-col justify-between bg-[#1e2147] p-12 lg:flex">
         <div>
           <div className="text-white">
-            <svg
-              className="h-12 w-12"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2L2 19.7778H22L12 2ZM12 5.77778L18.5795 17.7778H5.42047L12 5.77778Z" />
-            </svg>
+            <img src="/images/appexert-logo-white.svg" alt="appexert white logo" />
             <div className="mt-2 text-2xl font-semibold">AppExert</div>
           </div>
         </div>
