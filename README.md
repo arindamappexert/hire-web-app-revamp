@@ -98,11 +98,7 @@ The app supports hot reloading, so any changes you make to the code will automat
 
 ## Project Structure
 
-The project follows the Next.js App Router paradigm, with the main application code located in the
-
-app
-
- directory.
+The project follows the Next.js App Router paradigm, with the main application code located in the app directory.
 
 ```bash
 
