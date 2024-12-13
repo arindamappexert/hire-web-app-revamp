@@ -17,17 +17,13 @@ To get a local copy of the project up and running, follow these steps.
 1\. **Clone the repository:**
 
    ```bash
-
    git clone https://github.com/yourusername/hire-web-app-revamp.git
-
    ```
 
 2\. **Navigate to the project directory:**
 
    ```bash
-
    cd hire-web-app-revamp
-
    ```
 
 3\. **Install dependencies:**
@@ -35,25 +31,19 @@ To get a local copy of the project up and running, follow these steps.
    Using npm:
 
    ```bash
-
    npm install
-
    ```
 
    Or using yarn:
 
    ```bash
-
    yarn install
-
    ```
 
    Or using pnpm:
 
    ```bash
-
    pnpm install
-
    ```
 
 4\. **Set up environment variables:**
@@ -83,33 +73,25 @@ Start the development server:
 Using npm:
 
 ```bash
-
 npm run dev
-
 ```
 
 Or using yarn:
 
 ```bash
-
 yarn dev
-
 ```
 
 Or using pnpm:
 
 ```bash
-
 pnpm dev
-
 ```
 
 Or using bun:
 
 ```bash
-
 bun dev
-
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
