@@ -1,13 +1,13 @@
 export interface User {
-  id: number;
+  id: string;
   uniqueId: string;
   email: string;
   firstName: string;
-  lastName: null;
-  phone: null;
-  image: null;
-  role: Role;
-  roles: string[];
+  lastName: string;
+  phone: string;
+  image: string;
+  role?: Role;
+  roles?: (keyof typeof ROLE_TYPE)[];
 }
 
 export interface Role {
@@ -27,4 +27,3 @@ export const ROLE_TYPE = {
   DEVELOPER: 2,
   COMPANY: 3
 };
-
