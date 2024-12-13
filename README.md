@@ -16,35 +16,35 @@ To get a local copy of the project up and running, follow these steps.
 
 1\. **Clone the repository:**
 
-   ```bash
-   git clone https://github.com/yourusername/hire-web-app-revamp.git
-   ```
+```bash
+git clone https://github.com/yourusername/hire-web-app-revamp.git
+```
 
 2\. **Navigate to the project directory:**
 
-   ```bash
-   cd hire-web-app-revamp
-   ```
+```bash
+cd hire-web-app-revamp
+```
 
 3\. **Install dependencies:**
 
    Using npm:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
    Or using yarn:
 
-   ```bash
-   yarn install
-   ```
+```bash
+yarn install
+```
 
    Or using pnpm:
 
-   ```bash
-   pnpm install
-   ```
+```bash
+ pnpm install
+```
 
 4\. **Set up environment variables:**
 
@@ -59,12 +59,10 @@ NEXT_PUBLIC_API_URL
  variable:
 
    ```env
-
    NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
-
    ```
 
-   Adjust the URL as needed for your API server.
+Adjust the URL as needed for your API server.
 
 ### Running the Development Server
 
