@@ -48,7 +48,7 @@ yarn install
 
 4\. **Set up environment variables:**
 
-   Create a
+Create a
 
 .env.local
 
@@ -58,9 +58,9 @@ NEXT_PUBLIC_API_URL
 
  variable:
 
-   ```env
-   NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
-   ```
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
+```
 
 Adjust the URL as needed for your API server.
 
@@ -279,6 +279,16 @@ className
 - **Styling**: Tailwind CSS is used for styling components.
 
 - **API Interaction**: Axios and React Query are used for data fetching and caching.
+
+Roadmap
+-------
+
+Planned features and improvements to be added by December 2024:
+
+-   **Complete Admin UI Functionality**: Implement all administrative interfaces and features.
+-   **Git Hooks and Code Quality Tools**: Set up Husky for Git hooks, lint-staged for pre-commit linting, Prettier for code formatting, and commit linting to ensure consistent commit messages.
+-   **Pull Request Template**: Introduce a comprehensive PR template to streamline code reviews and contributions.
+-   **Style Guide Implementation**: Develop and enforce a style guide to maintain code consistency and quality across the project.
 
 ## Contributing
 
