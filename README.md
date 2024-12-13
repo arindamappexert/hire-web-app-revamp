@@ -162,79 +162,43 @@ app
 
 ### Key Directories and Files
 
-app
+**app:** Contains the Next.js application pages, layouts, and components grouped by route segments.
 
-: Contains the Next.js application pages, layouts, and components grouped by route segments.
+- `(admin)/`: Admin-specific routes and pages.
 
-  - `(admin)/`: Admin-specific routes and pages.
+- `(auth)/`: Authentication-related routes and pages.
 
-  - `(auth)/`: Authentication-related routes and pages.
 
-  -
 
-globals.css
+**globals.css:** Global CSS styles.
 
-: Global CSS styles.
+**layout.tsx:** Root layout file that wraps all pages.
 
-  -
+**providers.tsx:** Context and provider components.
 
-layout.tsx
-
-: Root layout file that wraps all pages.
-
-  -
-
-providers.tsx
-
-: Context and provider components.
-
-components
-
-: Reusable UI components.
+**components:** Reusable UI components.
 
   - `ui/`: UI-specific components, often built using Radix UI and Tailwind CSS.
 
-config
+**config:** Configuration files for the application.
 
-: Configuration files for the application.
+**api.ts**: API configuration with endpoints and base URLs.
 
-  -
+**hooks:** Custom React hooks.
 
-api.ts
+**lib:** Utility libraries and helper functions.
 
-: API configuration with endpoints and base URLs.
+**services:** API service functions for data fetching and mutations.
 
-hooks
+**public:** Static assets like images and fonts.
 
-: Custom React hooks.
+**types:** TypeScript type definitions and interfaces.
 
-lib
+**middleware.ts:** Next.js middleware for handling requests. (Not useful if website is deployed to static hosting)
 
-: Utility libraries and helper functions.
+**tailwind.config.ts:** Tailwind CSS configuration file.
 
-services
-
-: API service functions for data fetching and mutations.
-
-public
-
-: Static assets like images and fonts.
-
-types
-
-: TypeScript type definitions and interfaces.
-
-middleware.ts
-
-: Next.js middleware for handling requests.
-
-tailwind.config.ts
-
-: Tailwind CSS configuration file.
-
-tsconfig.json
-
-: TypeScript configuration file.
+**tsconfig.json:** TypeScript configuration file.
 
 ## Core Technologies and Packages
 
