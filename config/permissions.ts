@@ -1,4 +1,4 @@
-import { ROLE_TYPE, RoutePermissions } from "@/types/auth";
+import { RoutePermissions } from "@/types/auth";
 
 export const PERMISSIONS = {
   SUPER_ADMIN: "SUPER_ADMIN",

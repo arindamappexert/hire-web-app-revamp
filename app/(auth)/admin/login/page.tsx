@@ -1,4 +1,3 @@
-// page.tsx
 "use client";
 
 import { useState } from "react";
@@ -53,7 +52,6 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Section */}
       <div className="hidden w-1/2 flex-col justify-between bg-[#1e2147] p-12 lg:flex">
         <div>
           <div className="text-white">
