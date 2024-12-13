@@ -12,19 +12,7 @@ export interface User {
 
 export interface Role {
   id: number;
-  name: string
+  name: string;
   label: string;
   description: string;
 }
-
-export interface RoutePermissions {
-  roles: (keyof typeof ROLE_TYPE)[];
-  permissions?: string[];
-}
-
-export const ROLE_TYPE = {
-  SUPER_ADMIN: 1,
-  DEVELOPER: 2,
-  COMPANY: 3
-};
-
