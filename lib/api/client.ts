@@ -1,9 +1,10 @@
-import { API_CONFIG } from "@/config/api";
+
 import axios from "axios";
 import { auth } from "@/lib/firebase";
+import { BASE_URL } from "@/config/api";
 
 export const api = axios.create({
-  baseURL: API_CONFIG.baseUrl,
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

@@ -12,7 +12,7 @@ export interface User {
 
 export interface Role {
   id: number;
-  name: string
+  name: string;
   label: string;
   description: string;
 }
@@ -25,5 +25,28 @@ export interface RoutePermissions {
 export const ROLE_TYPE = {
   SUPER_ADMIN: 1,
   DEVELOPER: 2,
-  COMPANY: 3
+  COMPANY: 3,
 };
+
+export interface FirebaseAccountInfoResponse {
+  kind: string;
+  users: FirebaseUser[];
+}
+
+export interface FirebaseUser {
+  localId: string;
+  email: string;
+  emailVerified: boolean;
+  passwordHash: string;
+  passwordUpdatedAt: number;
+  validSince: string;
+  disabled: boolean;
+  lastLoginAt: string;
+  createdAt: string;
+  customAttributes: string;
+  providerUserInfo: string;
+}
+
+export interface CustomAttributes {
+  role: 'superadmin' | 'developer' | 'company';
+}

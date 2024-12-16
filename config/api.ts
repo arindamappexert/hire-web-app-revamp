@@ -1,4 +1,4 @@
-export const API_CONFIG = {
+const API_CONFIG = {
   baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1",
   endpoints: {
     auth: {
@@ -20,9 +20,37 @@ export const API_CONFIG = {
       create: "/developers",
       update: (id: string) => `/developers/${id}`,
       delete: (id: string) => `/developers/${id}`,
-    }
+    },
   },
 } as const;
+
+type EndpointPaths<T> = {
+  [K in keyof T]: T[K] extends object
+    ? `${Extract<K, string>}.${EndpointPaths<T[K]>}`
+    : Extract<K, string>;
+}[keyof T];
+
+export const BASE_URL = API_CONFIG.baseUrl;
+
+export const createApiUrl = <
+  T extends EndpointPaths<typeof API_CONFIG.endpoints>
+>(
+  endpoint: T,
+  ...args: any[]
+): string => {
+  const keys = endpoint.split(".") as (keyof typeof API_CONFIG.endpoints)[];
+  let url: any = API_CONFIG.endpoints;
+
+  for (const key of keys) {
+    url = url[key];
+  }
+
+  if (typeof url === "function") {
+    url = url(...args);
+  }
+
+  return `${API_CONFIG.baseUrl}${url}`;
+};
 
 export interface PaginationParams {
   page?: number;

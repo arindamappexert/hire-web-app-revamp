@@ -1,63 +1,118 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
-import { usePermissions } from "@/hooks/usePermissions";
-import { ROUTE_PERMISSIONS } from "@/config/permissions";
-import { User } from "@/types/auth";
+import { getDefaultLoginPath, getLoginPathByRole, ROUTE_PERMISSIONS } from "@/config/permissions";
 import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
 import { Spinner } from "@/components/ui/spinner";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { ROLE_TYPE } from "@/types/auth";
+import { useMe } from "@/hooks/api/useMe";
+
+export interface AuthGuardProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  redirectPath?: string;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  isAuthorized: boolean;
+  isLoading: boolean;
+  error: Error | null;
+}
 
 export default function RouteGuard({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  fallback = (
+    <div className="flex justify-center items-center h-screen">
+      <Spinner />
+    </div>
+  ),
+  redirectPath = "/login",
+}: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useUserStore();
-  const { loading } = useFirebaseAuth();
-  const { hasPermission, hasRole } = usePermissions(user as User | null);
+  const { loading: authLoading } = useFirebaseAuth();
+
+  const [authState, setAuthState] = useState<AuthState>({
+    isAuthenticated: false,
+    isAuthorized: false,
+    isLoading: true,
+    error: null,
+  });
 
   useEffect(() => {
-    if (!loading) {
-      checkAuth();
+    const validateAccess = async () => {
+      try {
+        const routeConfig = ROUTE_PERMISSIONS[pathname];
+
+        // Public route check
+        if (!routeConfig) {
+          setAuthState({
+            isAuthenticated: true,
+            isAuthorized: true,
+            isLoading: false,
+            error: null,
+          });
+          return;
+        }
+
+        // Authentication check
+        if (!user) {
+          const returnUrl = encodeURIComponent(pathname);
+          const redirectPath = getDefaultLoginPath();
+          router.push(`${redirectPath}?returnUrl=${returnUrl}`);
+          return;
+        }
+
+        const hasValidRole = routeConfig.roles?.some(
+          (role) => ROLE_TYPE[role] === user.role?.id
+        );
+
+        if (!hasValidRole) {
+          router.push("/unauthorized");
+          return;
+        }
+
+        setAuthState({
+          isAuthenticated: true,
+          isAuthorized: true,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        setAuthState({
+          isAuthenticated: false,
+          isAuthorized: false,
+          isLoading: false,
+          error: error as Error,
+        });
+      }
+    };
+
+    if (!authLoading) {
+      validateAccess();
     }
-  }, [pathname, user, loading]);
+  }, [pathname, user, authLoading]);
 
-  const checkAuth = () => {
-    const routeConfig = ROUTE_PERMISSIONS[pathname];
+  if (authLoading || authState.isLoading) {
+    return fallback;
+  }
 
-    if (!routeConfig) return; // Public route
-
-    if (!user) {
-      const returnUrl = encodeURIComponent(pathname);
-      router.push(`/login?returnUrl=${returnUrl}`);
-      return;
-    }
-
-    // Check roles
-    const hasValidRole = routeConfig.roles?.some((role) => hasRole(role));
-
-    console.log(hasValidRole, "hasValidRole");
-    console.log({pathname, routeConfig, user}, "pathname, routeConfig, user");
-    if (!hasValidRole) {
-      router.push("/unauthorized");
-      return;
-    }
-
-    // Check permissions
-    const hasValidPermission = routeConfig.permissions?.every((permission) =>
-      hasPermission(permission)
+  if (authState.error) {
+    return (
+      <ErrorBoundary
+        error={authState.error}
+        resetQuery={() => window.location.reload()}
+      />
     );
-    if (routeConfig.permissions && !hasValidPermission) {
-      router.push("/unauthorized");
-      return;
-    }
-  };
-  if (loading) {
-    return <Spinner />;
+  }
+
+  if (!authState.isAuthenticated || !authState.isAuthorized) {
+    return null;
   }
 
   return <>{children}</>;

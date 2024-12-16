@@ -1,4 +1,4 @@
-import { RoutePermissions } from "@/types/auth";
+import { ROLE_TYPE, RoutePermissions } from "@/types/auth";
 
 export const PERMISSIONS = {
   SUPER_ADMIN: "SUPER_ADMIN",
@@ -28,3 +28,19 @@ export const ROLE_PERMISSIONS: Record<string, string[]> = {
   DEVELOPER: [],
   COMPANY: [],
 };
+
+
+
+export const LOGIN_PATHS = {
+  [ROLE_TYPE.SUPER_ADMIN]: '/login/admin',
+  [ROLE_TYPE.DEVELOPER]: '/login/developer',
+  [ROLE_TYPE.COMPANY]: '/login/company',
+  DEFAULT: '/login/developers'
+} as const;
+
+export const getLoginPathByRole = (roleId?: number): string => {
+  if (!roleId) return LOGIN_PATHS.DEFAULT;
+  return LOGIN_PATHS[roleId as keyof typeof LOGIN_PATHS] || LOGIN_PATHS.DEFAULT;
+};
+
+export const getDefaultLoginPath = () => LOGIN_PATHS.DEFAULT;
