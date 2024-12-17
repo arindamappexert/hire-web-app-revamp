@@ -21,6 +21,14 @@ const API_CONFIG = {
       update: (id: string) => `/developers/${id}`,
       delete: (id: string) => `/developers/${id}`,
     },
+    jobPosts: {
+      statuses: "/job-post-statuses",
+      getAll: "/job-posts",
+      detail: (id: string) => `/job-posts/${id}`,
+      create: "/job-posts",
+      update: (id: string) => `/job-posts/${id}`,
+      delete: (id: string) => `/job-posts/${id}`,
+    }
   },
 } as const;
 

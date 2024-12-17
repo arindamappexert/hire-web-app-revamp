@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
-import { getDefaultLoginPath, getLoginPathByRole, ROUTE_PERMISSIONS } from "@/config/permissions";
-import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
+import { getDefaultLoginPath, getLoggedInPathByRole, LOGIN_PATHS, ROUTE_PERMISSIONS } from "@/config/permissions";
+import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/ui/spinner";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { ROLE_TYPE } from "@/types/auth";
-import { useMe } from "@/hooks/api/useMe";
 
 export interface AuthGuardProps {
   children: React.ReactNode;
@@ -35,7 +34,7 @@ export default function RouteGuard({
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useUserStore();
-  const { loading: authLoading } = useFirebaseAuth();
+  const { loading: authLoading } = useAuth();
 
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
@@ -48,8 +47,18 @@ export default function RouteGuard({
     const validateAccess = async () => {
       try {
         const routeConfig = ROUTE_PERMISSIONS[pathname];
+        const isLoginPage = Object.values(LOGIN_PATHS).includes(pathname as any);
 
-        // Public route check
+        console.log({ isLoginPage, user, routeConfig })
+
+        // Redirect logged-in users from login pages
+        if (isLoginPage && user) {
+          router.replace(getLoggedInPathByRole(user.role?.id));
+          return;
+        }
+
+
+        // Allow access to public routes
         if (!routeConfig) {
           setAuthState({
             isAuthenticated: true,
@@ -60,20 +69,21 @@ export default function RouteGuard({
           return;
         }
 
-        // Authentication check
+        // Handle unauthenticated users
         if (!user) {
-          const returnUrl = encodeURIComponent(pathname);
-          const redirectPath = getDefaultLoginPath();
-          router.push(`${redirectPath}?returnUrl=${returnUrl}`);
+          const loginPath = getDefaultLoginPath();
+          router.replace(`${loginPath}`);
           return;
         }
 
+        // Check role-based authorization
         const hasValidRole = routeConfig.roles?.some(
           (role) => ROLE_TYPE[role] === user.role?.id
         );
 
-        if (!hasValidRole) {
-          router.push("/unauthorized");
+        // Check permission-based authorization
+        if (!hasValidRole || (routeConfig.permissions)) {
+          router.replace("/unauthorized");
           return;
         }
 
@@ -96,7 +106,7 @@ export default function RouteGuard({
     if (!authLoading) {
       validateAccess();
     }
-  }, [pathname, user, authLoading]);
+  }, [pathname, user, authLoading, router]);
 
   if (authLoading || authState.isLoading) {
     return fallback;

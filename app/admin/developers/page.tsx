@@ -1,10 +1,10 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Page() {
-  const { logout } = useFirebaseAuth();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();

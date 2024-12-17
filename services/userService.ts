@@ -38,8 +38,6 @@ export const getMe = async () => {
     if (!idToken) {
       throw new Error("No authenticated user found");
     }
-
-    api.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
     const response = await api.get<User>(createApiUrl("users.me"));
 
     // Update user store with complete user data
