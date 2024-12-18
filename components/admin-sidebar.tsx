@@ -2,12 +2,9 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
   Briefcase,
-  Command,
-  GalleryVerticalEnd,
   Settings2,
   Settings2Icon,
   SquareMenuIcon,

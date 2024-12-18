@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from "react"
 import { MoreVertical } from 'lucide-react'
 import {
     Table,
@@ -29,7 +28,6 @@ interface JobTableProps {
 }
 
 export function JobPostsTable({ jobPosts, onSort, sortColumn, sortDirection }: JobTableProps) {
-    const [selectedJob, setSelectedJob] = useState<string | null>(null)
 
     const handleAction = (action: string, jobId: string) => {
         console.log(`${action} for job ${jobId}`)
@@ -86,7 +84,7 @@ export function JobPostsTable({ jobPosts, onSort, sortColumn, sortDirection }: J
                         <TableCell>{jobPost.company?.name}</TableCell>
                         <TableCell>
                             <div className="flex -space-x-2">
-                                {jobPost?.applications?.slice(0, 3).map((applicant, i) => (
+                                {jobPost?.applications?.slice(0, 3).map((applicant) => (
                                     <Avatar key={applicant.developerId} className="border-2 border-background">
                                         <AvatarImage src={applicant?.developer?.user?.image || ''} alt={applicant?.developer?.user.firstName} />
                                         <AvatarFallback>{applicant?.developer?.user.firstName} {applicant?.developer?.user?.lastName}</AvatarFallback>

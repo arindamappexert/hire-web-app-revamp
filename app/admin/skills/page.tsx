@@ -5,3 +5,5 @@ const SkillsPage = () => {
         </div>
     );
 };
+
+export default SkillsPage;

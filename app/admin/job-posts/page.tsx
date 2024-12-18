@@ -20,7 +20,7 @@ export default function JobPostsPage() {
 
     const { data: jobPostStatuses } = useJobPostStatuses();
 
-    const { data: jobPosts, isLoading } = useGetAll({
+    const { data: jobPosts } = useGetAll({
 
         expand: ['company', 'status', 'applications'],
         filters: {
@@ -48,7 +48,7 @@ export default function JobPostsPage() {
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="flex items-center justify-start bg-background border-b">
                     {jobPostStatuses?.sort((a, b) => a.order - b.order)
-                        .map(({ label, jobPostsCount, order }, index) => (
+                        .map(({ label, order }, index) => (
                             <TabsTrigger
                                 key={index}
                                 value={String(order)}

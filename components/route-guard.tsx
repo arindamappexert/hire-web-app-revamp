@@ -29,7 +29,6 @@ export default function RouteGuard({
       <Spinner />
     </div>
   ),
-  redirectPath = "/login",
 }: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -50,9 +49,7 @@ export default function RouteGuard({
         if(!userRoleId) return;
         const routeConfig = ROUTE_PERMISSIONS[pathname];
         const rolePermissions = ROLE_PERMISSIONS[userRoleId];
-        const isLoginPage = Object.values(LOGIN_PATHS).includes(pathname as any);
-
-        console.log({ isLoginPage, user, routeConfig })
+        const isLoginPage = (Object.values(LOGIN_PATHS) as string[]).includes(pathname);
 
         // Redirect logged-in users from login pages
         if (isLoginPage && user) {

@@ -1,8 +1,8 @@
-import { ROLE_PERMISSIONS, PERMISSIONS } from "@/config/permissions";
-import { ROLE_TYPE, User } from "@/types/auth";
+import { ROLE_PERMISSIONS } from "@/config/permissions";
+import { PERMISSIONS, ROLE_TYPE, User } from "@/types/auth";
 
 export function usePermissions(user: User | null) {
-  const hasPermission = (permission: string): boolean => {
+  const hasPermission = (permission: keyof typeof PERMISSIONS): boolean => {
     if (!user) return false;
 
     const userPermissions = (user.roles ?? []).flatMap(
