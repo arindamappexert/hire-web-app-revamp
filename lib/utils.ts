@@ -24,7 +24,7 @@ export const buildQueryString = (params: QueryParams): string => {
   if (params.filters) {
     Object.entries(params.filters).forEach(([key, value]) => {
       if (value !== undefined) {
-        searchParams.append(key, String(value));
+        searchParams.append(`filter.${key}`, String(value));
       }
     });
   }

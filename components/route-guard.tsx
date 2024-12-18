@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
-import { getDefaultLoginPath, getLoggedInPathByRole, LOGIN_PATHS, ROUTE_PERMISSIONS } from "@/config/permissions";
+import { getDefaultLoginPath, getLoggedInPathByRole, LOGIN_PATHS, ROLE_PERMISSIONS, ROUTE_PERMISSIONS } from "@/config/permissions";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/ui/spinner";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -46,14 +46,17 @@ export default function RouteGuard({
   useEffect(() => {
     const validateAccess = async () => {
       try {
+        const userRoleId = user?.role?.id;
+        if(!userRoleId) return;
         const routeConfig = ROUTE_PERMISSIONS[pathname];
+        const rolePermissions = ROLE_PERMISSIONS[userRoleId];
         const isLoginPage = Object.values(LOGIN_PATHS).includes(pathname as any);
 
         console.log({ isLoginPage, user, routeConfig })
 
         // Redirect logged-in users from login pages
         if (isLoginPage && user) {
-          router.replace(getLoggedInPathByRole(user.role?.id));
+          router.replace(getLoggedInPathByRole(userRoleId));
           return;
         }
 
@@ -81,8 +84,14 @@ export default function RouteGuard({
           (role) => ROLE_TYPE[role] === user.role?.id
         );
 
+        const hasPermission = rolePermissions?.some(
+          (permission) => routeConfig.permissions?.includes(permission)
+        );
+
+
+
         // Check permission-based authorization
-        if (!hasValidRole || (routeConfig.permissions)) {
+        if (!hasValidRole || !hasPermission) {
           router.replace("/unauthorized");
           return;
         }

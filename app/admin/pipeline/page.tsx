@@ -1,3 +1,5 @@
+
+
 const PipelinePage = () => {
     return (
         <div>
@@ -5,3 +7,5 @@ const PipelinePage = () => {
         </div>
     );
 };
+
+export default PipelinePage;

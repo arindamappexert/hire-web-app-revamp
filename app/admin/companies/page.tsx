@@ -5,3 +5,5 @@ const CompaniesPage = () => {
         </div>
     );
 };
+
+export default CompaniesPage;

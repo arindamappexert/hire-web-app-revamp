@@ -33,7 +33,7 @@ export interface JobPost {
     audit: Audit;
     company: Company;
     status: Pick<JobPostStatus, 'id' | 'label'>;
-    applications: any[];
+    applications: Application[];
     applicationsCount: number;
 }
 
@@ -62,9 +62,29 @@ export interface Company {
     companySize: null;
 }
 
+interface Application {
+    developerId: number;
+    developer: Developer;
+}
+
+interface Developer {
+    id: number;
+    user: User;
+}
+
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    image: null;
+}
+
+
 
 
 
 export type JobPostStatusListResponse = JobPostStatus[];
 
 export interface JobPostListResponse extends PaginatedResponse<JobPost[]> { }
+
+

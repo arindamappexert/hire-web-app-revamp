@@ -18,16 +18,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import type { Job } from "../types/job"
+import { JobPost } from "@/types/job-post"
+
 
 interface JobTableProps {
-    jobs: Job[]
+    jobPosts: JobPost[]
     onSort: (column: string) => void
     sortColumn?: string
     sortDirection?: 'asc' | 'desc'
 }
 
-export function JobTable({ jobs, onSort, sortColumn, sortDirection }: JobTableProps) {
+export function JobPostsTable({ jobPosts, onSort, sortColumn, sortDirection }: JobTableProps) {
     const [selectedJob, setSelectedJob] = useState<string | null>(null)
 
     const handleAction = (action: string, jobId: string) => {
@@ -78,27 +79,27 @@ export function JobTable({ jobs, onSort, sortColumn, sortDirection }: JobTablePr
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {jobs.map((job) => (
-                    <TableRow key={job.id}>
-                        <TableCell className="font-mono text-sm">{job.id}</TableCell>
-                        <TableCell>{job.jobTitle}</TableCell>
-                        <TableCell>{job.companyName}</TableCell>
+                {jobPosts.map((jobPost) => (
+                    <TableRow key={jobPost.id}>
+                        <TableCell className="font-mono text-sm">{jobPost.id}</TableCell>
+                        <TableCell>{jobPost.title}</TableCell>
+                        <TableCell>{jobPost.company?.name}</TableCell>
                         <TableCell>
                             <div className="flex -space-x-2">
-                                {job.applicants.slice(0, 3).map((applicant, i) => (
-                                    <Avatar key={applicant.id} className="border-2 border-background">
-                                        <AvatarImage src={applicant.avatar} alt={applicant.name} />
-                                        <AvatarFallback>{applicant.name[0]}</AvatarFallback>
+                                {jobPost?.applications?.slice(0, 3).map((applicant, i) => (
+                                    <Avatar key={applicant.developerId} className="border-2 border-background">
+                                        <AvatarImage src={applicant?.developer?.user?.image || ''} alt={applicant?.developer?.user.firstName} />
+                                        <AvatarFallback>{applicant?.developer?.user.firstName} {applicant?.developer?.user?.lastName}</AvatarFallback>
                                     </Avatar>
                                 ))}
-                                {job.applicants.length > 3 && (
+                                {jobPost.applicationsCount > 1 && (
                                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm">
-                                        +{job.applicants.length - 3}
+                                        +{jobPost.applicationsCount - 1}
                                     </div>
                                 )}
                             </div>
                         </TableCell>
-                        <TableCell>{new Date(job.created).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(jobPost.workModeId).toLocaleDateString()}</TableCell>
                         <TableCell>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -107,23 +108,23 @@ export function JobTable({ jobs, onSort, sortColumn, sortDirection }: JobTablePr
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => handleAction('view', job.id)}>
+                                    <DropdownMenuItem onClick={() => handleAction('view', jobPost.id)}>
                                         View Job Description
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleAction('shortlist', job.id)}>
+                                    <DropdownMenuItem onClick={() => handleAction('shortlist', jobPost.id)}>
                                         Shortlist Profiles
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleAction('close', job.id)}>
+                                    <DropdownMenuItem onClick={() => handleAction('close', jobPost.id)}>
                                         Close Hiring
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleAction('pause', job.id)}>
+                                    <DropdownMenuItem onClick={() => handleAction('pause', jobPost.id)}>
                                         Pause Hiring
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleAction('edit', job.id)}>
+                                    <DropdownMenuItem onClick={() => handleAction('edit', jobPost.id)}>
                                         Edit
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
-                                        onClick={() => handleAction('delete', job.id)}
+                                        onClick={() => handleAction('delete', jobPost.id)}
                                         className="text-destructive"
                                     >
                                         Delete

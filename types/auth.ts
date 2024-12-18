@@ -19,14 +19,20 @@ export interface Role {
 
 export interface RoutePermissions {
   roles: (keyof typeof ROLE_TYPE)[];
-  permissions?: string[];
+  permissions?: (keyof typeof PERMISSIONS)[]
 }
+
+export const PERMISSIONS = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  MANAGE_DEVELOPERS: "MANAGE_DEVELOPERS",
+  MANAGE_PIPELINE: "MANAGE_PIPELINE",
+} as const;
 
 export const ROLE_TYPE = {
   SUPER_ADMIN: 1,
   DEVELOPER: 2,
   COMPANY: 3,
-};
+} as const;
 
 export interface FirebaseAccountInfoResponse {
   kind: string;

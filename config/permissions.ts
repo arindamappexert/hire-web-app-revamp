@@ -1,34 +1,24 @@
-import { ROLE_TYPE, RoutePermissions } from "@/types/auth";
-
-export const PERMISSIONS = {
-  SUPER_ADMIN: "SUPER_ADMIN",
-  MANAGE_DEVELOPERS: "MANAGE_DEVELOPERS",
-};
+import { PERMISSIONS, ROLE_TYPE, RoutePermissions } from "@/types/auth";
 
 export const ROUTE_PERMISSIONS: Record<string, RoutePermissions> = {
-  "/dashboard/developer": {
-    roles: ["DEVELOPER", "SUPER_ADMIN"],
-  },
-  "/dashboard/company": {
-    roles: ["COMPANY", "SUPER_ADMIN"],
-  },
-  "/dashboard/admin": {
-    roles: ["SUPER_ADMIN"],
-    permissions: ["SUPER_ADMIN"],
-  },
-
   "/admin/developers": {
     roles: ["SUPER_ADMIN"],
+    permissions: ['MANAGE_DEVELOPERS']
   },
+  "/admin/dashboard": {
+    roles: ["SUPER_ADMIN"],
+  },
+  "/admin/pipeline": {
+    roles: ["SUPER_ADMIN"],
+    permissions: ['MANAGE_PIPELINE']
+  }
 };
 
-export const ROLE_PERMISSIONS: Record<string, string[]> = {
-  ADMIN: [PERMISSIONS.MANAGE_DEVELOPERS, PERMISSIONS.SUPER_ADMIN],
-  DEVELOPER: [],
-  COMPANY: [],
+export const ROLE_PERMISSIONS: Record<string, (keyof typeof PERMISSIONS)[]> = {
+  [ROLE_TYPE.SUPER_ADMIN]: ['MANAGE_DEVELOPERS', 'SUPER_ADMIN', 'MANAGE_PIPELINE'],
+  [ROLE_TYPE.DEVELOPER]: [],
+  [ROLE_TYPE.COMPANY]: [],
 };
-
-
 
 export const LOGIN_PATHS = {
   [ROLE_TYPE.SUPER_ADMIN]: '/login/admin',

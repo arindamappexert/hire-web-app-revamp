@@ -1,5 +1,5 @@
 export interface PaginatedResponse<T> {
-  data: T[];
+  data: T;
   meta: Meta;
   links: Links;
 }
