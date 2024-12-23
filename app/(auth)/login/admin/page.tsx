@@ -18,7 +18,7 @@ import { EyeIcon } from "lucide-react";
 import { LoginFormData, loginSchema } from "@/lib/validations/auth";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/auth/context";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,10 +36,8 @@ export default function LoginPage() {
 
   const handleLogin = async (data: LoginFormData) => {
     try {
-      await login(data.email, data.password, () => {
-        console.log("Logged in successfully");
-        router.push("/admin/developers");
-      });
+      await login(data.email, data.password);
+      router.push('/admin/dashboard');
     } catch (error) {
       console.error("Login failed:", error);
       toast({

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/auth/context";
 
 export default function Page() {
   const { logout } = useAuth();

@@ -23,7 +23,7 @@ import {
 import Image from "next/image";
 import { useUserStore } from "@/stores/useUserStore";
 import { User } from "@/types/auth";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/auth/context";
 
 const data = {
   navMain: [
@@ -73,8 +73,7 @@ const data = {
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useUserStore();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   return (
     <Sidebar collapsible="icon" {...props}>
       <div className="p-4">
