@@ -1,4 +1,5 @@
-import { QueryParams } from "@/config/api";
+
+import { QueryParams } from "@/lib/api/types";
 import { PaginatedResponse } from "./apiResponse";
 
 export interface Developer {

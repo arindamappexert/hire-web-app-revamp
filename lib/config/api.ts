@@ -29,6 +29,14 @@ export const API_ENDPOINTS = {
         create: '/developers',
         update: (id: string) => `/developers/${id}`,
         delete: (id: string) => `/developers/${id}`,
+    },
+    jobPosts: {
+        list: '/job-posts',
+        detail: (id: string) => `/job-posts/${id}`,
+        create: '/job-posts',
+        update: (id: string) => `/job-posts/${id}`,
+        delete: (id: string) => `/job-posts/${id}`,
+        statuses: '/job-posts/statuses',
     }
 } as const;
 

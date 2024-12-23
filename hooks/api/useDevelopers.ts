@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDevelopers } from "@/services/developerService";
-import { DeveloperQueryParams } from "@/types/developer";
+import { QueryParams } from "@/lib/api/types";
 
 export const DEVELOPER_QUERY_KEY = "developers";
 
-export function useDevelopers(params: DeveloperQueryParams = {}) {
+export function useDevelopers(params: QueryParams = {}) {
   return useQuery({
     queryKey: [DEVELOPER_QUERY_KEY, params],
     queryFn: () => getDevelopers(params),
