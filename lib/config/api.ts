@@ -23,8 +23,20 @@ export const API_ENDPOINTS = {
         update: (id: string) => `/users/${id}`,
         delete: (id: string) => `/users/${id}`,
     },
+    developers: {
+        list: '/developers',
+        detail: (id: string) => `/developers/${id}`,
+        create: '/developers',
+        update: (id: string) => `/developers/${id}`,
+        delete: (id: string) => `/developers/${id}`,
+    }
 } as const;
 
+type EndpointPaths<T> = {
+    [K in keyof T]: T[K] extends object
+      ? `${Extract<K, string>}.${EndpointPaths<T[K]>}`
+      : Extract<K, string>;
+  }[keyof T];
 
 export const LOGIN_PATHS = {
     [ROLE_TYPE.SUPER_ADMIN]: '/login/admin',
@@ -49,3 +61,23 @@ export const getLoggedInPathByRole = (roleId?: number): string => {
     if (!roleId) return LOGGED_IN_PATHS.DEFAULT;
     return LOGGED_IN_PATHS[roleId as keyof typeof LOGGED_IN_PATHS] || LOGGED_IN_PATHS.DEFAULT;
 }
+
+export const createApiUrl = <
+  T extends EndpointPaths<typeof API_ENDPOINTS>
+>(
+  endpoint: T,
+  ...args: any[]
+): string => {
+  const keys = endpoint.split(".") as (keyof typeof API_ENDPOINTS)[];
+  let url: any = API_ENDPOINTS;
+
+  for (const key of keys) {
+    url = url[key];
+  }
+
+  if (typeof url === "function") {
+    url = url(...args);
+  }
+
+  return `${API_CONFIG.baseURL}${url}`;
+};

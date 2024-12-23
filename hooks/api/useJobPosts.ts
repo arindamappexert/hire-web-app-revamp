@@ -1,4 +1,5 @@
-import { QueryParams } from "@/config/api";
+
+import { QueryParams } from "@/lib/api/types";
 import { jobPostService } from "@/services/jobPostService";
 import { useQuery } from "@tanstack/react-query";
 

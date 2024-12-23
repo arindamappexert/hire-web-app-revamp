@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AuthState, ROLE_TYPE, User } from '@/lib/auth/types';
 import { axiosInstance } from '@/lib/api/axios';
 import { AuthProvider as AuthProviderType } from '@/lib/auth/providers/types';
-import { createApiUrl } from '@/config/api';
+import { createApiUrl } from '@/lib/config/api';
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -31,7 +31,7 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
       const token = await authProvider.getToken();
       if (!token) throw new Error('No token available');
 
-      const response = await axiosInstance.get(createApiUrl('users.me'), {
+      const response = await axiosInstance.get(createApiUrl('auth.me'), {
         headers: { Authorization: `Bearer ${token}` }
       });
       return response.data;
