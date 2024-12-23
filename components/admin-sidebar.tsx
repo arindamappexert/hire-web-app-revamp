@@ -21,7 +21,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
-import { useUserStore } from "@/stores/useUserStore";
 import { User } from "@/types/auth";
 import { useAuth } from "@/lib/auth/context";
 
@@ -74,6 +73,7 @@ export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { logout, user } = useAuth();
+  console.log('current user', user);
   return (
     <Sidebar collapsible="icon" {...props}>
       <div className="p-4">

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from './context';
 import { ROLE_TYPE } from '@/types/auth';
-import { getLoggedInPathByRole } from '@/lib/config/api';
+import { getLoginPathByRole } from '../config/api';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !pathname.includes('/login')) {
-      router.push(getLoggedInPathByRole())
+      router.push(getLoginPathByRole())
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 
