@@ -21,14 +21,15 @@ axiosInstance.interceptors.response.use(
         }
 
         // Refresh the token
-        const newToken = await authProvider.refreshAccessToken();
+        const newToken = await authProvider.auth.currentUser.accessToken;
 
         // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        console.error('Failed to refresh token', refreshError);
         // If refresh fails, redirect to login
-        window.location.href = getLoginPathByRole();
+        // window.location.href = getLoginPathByRole();
         return Promise.reject(refreshError);
       }
     }

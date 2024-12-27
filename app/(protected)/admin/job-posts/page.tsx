@@ -43,8 +43,6 @@ export default function JobPostsPage() {
 
     return (
         <div className="container py-6 space-y-6">
-
-
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="flex items-center justify-start bg-background border-b">
                     {jobPostStatuses?.sort((a, b) => a.order - b.order)
@@ -54,7 +52,6 @@ export default function JobPostsPage() {
                                 value={String(order)}
                                 className={cn('')}
                             >
-
                                 <span className="ml-2 text-xs">{label}</span>
                             </TabsTrigger>
                         ))}

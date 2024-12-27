@@ -42,7 +42,6 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
   useEffect(() => {
     const unsubscribe = authProvider.onAuthStateChanged(async (token) => {
       setIsAuthenticated(!!token);
-      setIsLoading(false);
       if (token) {
         refetch();
       }
@@ -50,6 +49,12 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
 
     return () => unsubscribe();
   }, [authProvider, refetch]);
+
+  useEffect(() => {
+    if (user) {
+      setIsLoading(false);
+    }
+  }, [user])
 
   const login = async (email: string, password: string) => {
     await authProvider.login(email, password);
