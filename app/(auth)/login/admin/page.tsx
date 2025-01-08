@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { EyeIcon } from "lucide-react";
 import { LoginFormData, loginSchema } from "@/lib/validations/auth";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/lib/hooks/use-toast";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/context";
 

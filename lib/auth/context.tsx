@@ -4,8 +4,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AuthState, ROLE_TYPE, User } from '@/lib/auth/types';
 import { axiosInstance } from '@/lib/api/axios';
-import { AuthProvider as AuthProviderType } from '@/lib/auth/providers/types';
+import { AuthProviderConfig } from '@/lib/auth/providers/types';
 import { createApiUrl } from '@/lib/config/api';
+import { useFirebaseAuth } from '@/lib/auth/providers/useFirebaseAuth';
+
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -18,17 +20,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: React.ReactNode;
-  authProvider: AuthProviderType;
+  config: AuthProviderConfig;
 }
 
-export function AuthProvider({ children, authProvider }: AuthProviderProps) {
+export function AuthProvider({ children, config }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const auth = useFirebaseAuth(config);
 
   const { data: user, refetch } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
-      const token = await authProvider.getToken();
+      const token = await auth.getToken();
       if (!token) throw new Error('No token available');
 
       const response = await axiosInstance.get(createApiUrl('auth.me'), {
@@ -40,7 +43,7 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
   });
 
   useEffect(() => {
-    const unsubscribe = authProvider.onAuthStateChanged(async (token) => {
+    const unsubscribe = auth.subscribeToAuthChanges(async (token) => {
       setIsAuthenticated(!!token);
       if (token) {
         refetch();
@@ -48,7 +51,7 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
     });
 
     return () => unsubscribe();
-  }, [authProvider, refetch]);
+  }, [auth, refetch]);
 
   useEffect(() => {
     if (user) {
@@ -57,11 +60,11 @@ export function AuthProvider({ children, authProvider }: AuthProviderProps) {
   }, [user])
 
   const login = async (email: string, password: string) => {
-    await authProvider.login(email, password);
+    await auth.login(email, password);
   };
 
   const logout = async () => {
-    await authProvider.logout();
+    await auth.logout();
   };
 
   const checkPermission = (permission: string) => {

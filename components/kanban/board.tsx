@@ -1,7 +1,7 @@
 "use client";
 
 import { Pipeline } from "@/components/kanban/pipeline";
-import { useMounted } from "@/hooks/use-mounted";
+import { useMounted } from "@/lib/hooks/use-mounted";
 import type { Pipeline as PipelineType } from "@/components/kanban/types";
 
 interface KanbanBoardProps {
