@@ -7,6 +7,8 @@ import {
   signOut,
   onAuthStateChanged,
   Auth,
+  createUserWithEmailAndPassword,
+  linkWithCredential,
 } from 'firebase/auth';
 import { AuthProvider, AuthProviderConfig } from '@/lib/auth/providers/types';
 
