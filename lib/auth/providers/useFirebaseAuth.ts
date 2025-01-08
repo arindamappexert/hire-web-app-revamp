@@ -1,15 +1,22 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
-  Auth,
   getAuth,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from 'firebase/auth';
-import { AuthProviderConfig } from '@/lib/auth/providers/types';
-import { getApp, initializeApp } from 'firebase/app'
+import {
+  initializeApp,
+  getApp,
+} from 'firebase/app'
+import { AuthProviderConfig, SSOProviderId } from './types';
+import { useProviderFactory } from './useProviderFactory';
+import { ssoProviderConfig } from './config';
 
 export function useFirebaseAuth(config: AuthProviderConfig) {
+  const { createProvider } = useProviderFactory();
+
   const app = useMemo(() => {
     try {
       return getApp();
@@ -28,6 +35,12 @@ export function useFirebaseAuth(config: AuthProviderConfig) {
     return result.user.getIdToken();
   }, [auth]);
 
+  const loginWithProvider = useCallback(async (providerId: SSOProviderId) => {
+    const provider = createProvider(providerId);
+    const result = await signInWithPopup(auth, provider);
+    return result.user.getIdToken();
+  }, [auth, createProvider]);
+
   const logout = useCallback(async () => {
     await signOut(auth);
   }, [auth]);
@@ -45,10 +58,22 @@ export function useFirebaseAuth(config: AuthProviderConfig) {
     });
   }, [auth]);
 
+  const getEnabledProviders = useCallback(() => {
+    if (!config.sso) return [];
+    return Object.entries(config.sso)
+      .filter(([, enabled]) => enabled)
+      .map(([id]) => ({
+        ...ssoProviderConfig[id],
+        login: () => loginWithProvider(id as SSOProviderId)
+      }));
+  }, [config.sso, loginWithProvider]);
+
   return {
     login,
+    loginWithProvider,
     logout,
     getToken,
-    subscribeToAuthChanges
+    subscribeToAuthChanges,
+    getEnabledProviders
   };
 }
