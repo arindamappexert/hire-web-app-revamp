@@ -14,6 +14,12 @@ interface AuthContextType extends AuthState {
   logout: () => Promise<void>;
   checkPermission: (permission: string) => boolean;
   checkRole: (role: keyof typeof ROLE_TYPE) => boolean;
+  enabledProviders: {
+    login: () => Promise<string>;
+    id: string;
+    name: string;
+    icon: string;
+  }[]
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -88,6 +94,8 @@ export function AuthProvider({ children, config }: AuthProviderProps) {
         logout,
         checkPermission,
         checkRole,
+        enabledProviders: auth.getEnabledProviders()
+
       }}
     >
       {children}
