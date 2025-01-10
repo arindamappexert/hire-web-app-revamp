@@ -15,7 +15,7 @@ interface AuthContextType extends AuthState {
   checkPermission: (permission: string) => boolean;
   checkRole: (role: keyof typeof ROLE_TYPE) => boolean;
   enabledProviders: {
-    login: () => Promise<string>;
+    login: () => Promise<string | void>;
     id: string;
     name: string;
     icon: string;

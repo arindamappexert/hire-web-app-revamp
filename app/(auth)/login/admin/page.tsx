@@ -19,12 +19,29 @@ import { LoginFormData, loginSchema } from "@/lib/validations/auth";
 import { useToast } from "@/lib/hooks/use-toast";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/context";
+import { SelectSeparator } from "@/components/ui/select";
+import { SSOButton } from "@/components/auth/sso-button";
 
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
-  const { login } = useAuth();
+  const { login, enabledProviders } = useAuth();
+
+  console.log(enabledProviders, "enabledProviders");
+
+  const handleSSOLogin = async (providerLogin: () => Promise<string | void>) => {
+    try {
+      await providerLogin();
+      router.push('/admin/dashboard');
+    } catch (error) {
+      console.error("SSO login failed:", error);
+      toast({
+        title: "Login failed",
+        description: "Could not sign in with selected provider",
+      });
+    }
+  };
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -141,6 +158,32 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
+
+          {enabledProviders.length > 0 && (
+            <>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <SelectSeparator />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {enabledProviders.map((provider) => (
+                  <SSOButton
+                    key={provider.id}
+                    name={provider.name}
+                    icon={provider.icon}
+                    onClick={() => handleSSOLogin(provider.login)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

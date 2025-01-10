@@ -1,10 +1,12 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  signInWithRedirect,
+  getRedirectResult,
 } from 'firebase/auth';
 import {
   initializeApp,
@@ -16,6 +18,7 @@ import { ssoProviderConfig } from './config';
 
 export function useFirebaseAuth(config: AuthProviderConfig) {
   const { createProvider } = useProviderFactory();
+  const loginMethod = config.loginMethod || 'popup';
 
   const app = useMemo(() => {
     try {
@@ -30,16 +33,40 @@ export function useFirebaseAuth(config: AuthProviderConfig) {
 
   const auth = useMemo(() => getAuth(app), [app]);
 
+  const loginWithPopup = useCallback(async (providerId: SSOProviderId) => {
+    const provider = createProvider(providerId);
+    const result = await signInWithPopup(auth, provider);
+    return result.user.getIdToken();
+  }, [auth, createProvider]);
+
+  const loginWithRedirect = useCallback(async (providerId: SSOProviderId) => {
+    const provider = createProvider(providerId);
+    await signInWithRedirect(auth, provider);
+  }, [auth, createProvider]);
+
+  const handleRedirectResult = useCallback(async () => {
+    const result = await getRedirectResult(auth);
+    console.log(result, "result from handleRedirectResult");
+    if (result) {
+      return result.user.getIdToken();
+    }
+    return null;
+  }, [auth]);
+
+  useEffect(() => {
+    handleRedirectResult();
+  }, [handleRedirectResult]);
+
   const login = useCallback(async (email: string, password: string) => {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return result.user.getIdToken();
   }, [auth]);
 
   const loginWithProvider = useCallback(async (providerId: SSOProviderId) => {
-    const provider = createProvider(providerId);
-    const result = await signInWithPopup(auth, provider);
-    return result.user.getIdToken();
-  }, [auth, createProvider]);
+    return loginMethod === 'popup' 
+      ? loginWithPopup(providerId)
+      : loginWithRedirect(providerId);
+  }, [loginMethod, loginWithPopup, loginWithRedirect]);
 
   const logout = useCallback(async () => {
     await signOut(auth);

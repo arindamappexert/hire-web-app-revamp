@@ -9,15 +9,17 @@ export interface AuthProviderConfig {
   apiKey: string;
   authDomain: string;
   sso?: {
-    google?: boolean;
-    github?: boolean;
+    google: boolean;
+    github: boolean;
   };
+  loginMethod?: 'popup' | 'redirect';
 }
 
 export interface SSOProvider {
   id: string;
   name: string;
   icon: string;
+  enabled?: boolean;
 }
 
 export type SSOProviderId = 'google' | 'github';
